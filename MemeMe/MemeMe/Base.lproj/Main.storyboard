@@ -41,6 +41,9 @@
                             </view>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ysU-eg-blE">
                                 <rect key="frame" x="0.0" y="524" width="320" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="5jB-at-uhl"/>
+                                </constraints>
                                 <items>
                                     <barButtonItem systemItem="camera" id="Bay-bE-dof">
                                         <connections>
@@ -102,8 +105,8 @@
                         <outlet property="buttonCancel" destination="oTo-bN-vR6" id="GgH-0Q-U1h"/>
                         <outlet property="buttonShare" destination="ugY-3H-oJi" id="1JN-zD-cMc"/>
                         <outlet property="imageViewMeme" destination="Vdw-LF-drw" id="z2E-Xn-Te0"/>
-                        <outlet property="texfieldBottom" destination="qYu-Yd-Tj3" id="QO8-KE-YyL"/>
-                        <outlet property="textfieldUp" destination="WN7-Z3-k8L" id="CYr-Ri-gMm"/>
+                        <outlet property="textfieldBottom" destination="qYu-Yd-Tj3" id="1hO-eI-RVR"/>
+                        <outlet property="textfieldTop" destination="WN7-Z3-k8L" id="iVz-Wg-P5P"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
