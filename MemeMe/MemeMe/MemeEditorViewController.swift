@@ -90,7 +90,7 @@ class MemeEditorViewController: UIViewController {
         let fontAttributes: [String: Any] = [
             NSAttributedStringKey.strokeColor.rawValue: UIColor.white,
             NSAttributedStringKey.foregroundColor.rawValue: UIColor.black,
-            NSAttributedStringKey.strokeWidth.rawValue: 4,
+            NSAttributedStringKey.strokeWidth.rawValue: -4,
             NSAttributedStringKey.paragraphStyle.rawValue: style,
         ]
         textfieldTop.defaultTextAttributes = fontAttributes
@@ -103,30 +103,25 @@ class MemeEditorViewController: UIViewController {
     
     private func load(image: UIImage?) {
         
+        // Enable/Disable the top buttons and the textfields
+        let hasImage = (image != nil)
+        buttonShare.isEnabled = hasImage
+        buttonCancel.isEnabled = hasImage
+        textfieldTop.isEnabled = hasImage
+        textfieldBottom.isEnabled = hasImage
+        
+        // If meme image is present
         if let image = image {
             
             // Shows the selected image
             imageViewMeme.image = image
-            
-            // Set the right UI state
-            buttonShare.isEnabled = true
-            buttonCancel.isEnabled = true
-            
-            textfieldTop.isEnabled = true
-            textfieldBottom.isEnabled = true
             
         } else {
             
             // Clear the image
             imageViewMeme.image = nil
             
-            // Disable the button and textfields
-            buttonShare.isEnabled = false
-            buttonCancel.isEnabled = false
-            
-            textfieldTop.isEnabled = false
-            textfieldBottom.isEnabled = false
-            
+            // Show the default text messages
             textfieldTop.text = "TOP"
             textfieldBottom.text = "BOTTOM"
         }
@@ -143,33 +138,32 @@ class MemeEditorViewController: UIViewController {
         // Function called when sharing is done or cancel
         screen.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
             
-            // If sharing was successful
-            if completed {
+            // Create the meme model
+            self.save(memeImage)
             
-                // Create the meme model
-                let meme = Meme(
-                    textTop: self.textfieldTop.text!,
-                    textBottom: self.textfieldBottom.text!,
-                    imageOriginal: self.imageViewMeme.image!,
-                    imageMeme: memeImage)
-                
-                // Shows a success alert
-                let actionOk = UIAlertAction(title: "OK", style: .default)
-                let alert = UIAlertController(title: "Meme Sharing", message: "Your meme was shared successfully!", preferredStyle: .alert)
-                alert.addAction(actionOk)
-                self.present(alert, animated: true)
-            }
+            // Shows a success alert
+            let actionOk = UIAlertAction(title: "OK", style: .default)
+            let alert = UIAlertController(title: "Meme Sharing", message: "Your meme was shared successfully!", preferredStyle: .alert)
+            alert.addAction(actionOk)
+            self.present(alert, animated: true)
         }
         
         present(screen, animated: true)
     }
     
+    private func save(_ memeImage: UIImage) {
+        
+        let meme = Meme(
+            textTop: self.textfieldTop.text!,
+            textBottom: self.textfieldBottom.text!,
+            imageOriginal: self.imageViewMeme.image!,
+            imageMeme: memeImage)
+    }
+    
     private func generateMemedImage() -> UIImage {
         
         // Hide toolbar and navbar
-        navBar.isHidden = true
-        toolBar.isHidden = true
-        systemBar.isHidden = true
+        configureBars(hidden: true)
         
         // Render view to an image
         UIGraphicsBeginImageContext(self.view.frame.size)
@@ -179,11 +173,17 @@ class MemeEditorViewController: UIViewController {
         UIGraphicsEndImageContext()
 
         // Show toolbar and navbar
-        navBar.isHidden = false
-        toolBar.isHidden = false
-        systemBar.isHidden = false
+        configureBars(hidden: false)
         
         return memedImage
+    }
+    
+    private func configureBars(hidden: Bool) {
+        
+        // Set toolbar and navbar visibility
+        navBar.isHidden = hidden
+        toolBar.isHidden = hidden
+        systemBar.isHidden = hidden
     }
 
     private func subscribeToKeyboardEvents() {
