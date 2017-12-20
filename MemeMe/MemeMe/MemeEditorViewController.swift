@@ -10,18 +10,18 @@ import UIKit
 
 class MemeEditorViewController: UIViewController {
     
-    // Toolbars
+    // MARK: Toolbars
     @IBOutlet weak var navBar: UINavigationBar!
     @IBOutlet weak var toolBar: UIToolbar!
     @IBOutlet weak var systemBar: UIView!
     
-    // Toolbar buttons
+    // MARK: Toolbar buttons
     @IBOutlet weak var buttonCamera: UIBarButtonItem!
     @IBOutlet weak var buttonAlbum: UIBarButtonItem!
     @IBOutlet weak var buttonShare: UIBarButtonItem!
     @IBOutlet weak var buttonCancel: UIBarButtonItem!
     
-    // Meme Editor Controls
+    // MARK: Meme Editor Controls
     @IBOutlet weak var textfieldTop: UITextField!
     @IBOutlet weak var textfieldBottom: UITextField!
     @IBOutlet weak var imageViewMeme: UIImageView!
@@ -48,7 +48,7 @@ class MemeEditorViewController: UIViewController {
         unsubscribeToKeyboardEvents()
     }
     
-    // IBActions
+    // MARK: IBActions
     @IBAction func onTapCamera(_ sender: UIBarButtonItem) {
         getImage(from: .camera)
     }
@@ -65,11 +65,12 @@ class MemeEditorViewController: UIViewController {
         load(image: nil)
     }
     
+    // MARK: Meme handling
     private func getImage(from source: UIImagePickerControllerSourceType) {
         
         // To check if device has a camera or a photo library to read the image from
         if UIImagePickerController.isSourceTypeAvailable(source) {
-        
+            
             // Creates the camer/image picker
             let picker = UIImagePickerController()
             picker.delegate = self
@@ -81,6 +82,53 @@ class MemeEditorViewController: UIViewController {
         }
     }
     
+    private func generateMemedImage() -> UIImage {
+        
+        // Hide toolbar and navbar
+        configureBars(hidden: true)
+        
+        // Render view to an image
+        UIGraphicsBeginImageContext(view.frame.size)
+        view.drawHierarchy(in: view.frame, afterScreenUpdates: true)
+        
+        let memedImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        
+        // Show toolbar and navbar
+        configureBars(hidden: false)
+        
+        return memedImage
+    }
+    
+    private func shareMeme() {
+        
+        // Takes a screenshot of the screen
+        let memeImage = generateMemedImage()
+        
+        // Creates the screen to share the meme
+        let screen = UIActivityViewController(activityItems: [memeImage], applicationActivities: nil)
+        
+        // Function called when sharing is done or cancel
+        screen.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
+            
+            // Create the meme model
+            if completed {
+                self.save(memeImage)
+            }
+        }
+        present(screen, animated: true)
+    }
+    
+    private func save(_ memeImage: UIImage) {
+        
+        let meme = Meme(
+            textTop: textfieldTop.text!,
+            textBottom: textfieldBottom.text!,
+            imageOriginal: imageViewMeme.image!,
+            imageMeme: memeImage)
+    }
+    
+    // MARK: UI config
     private func setInitUIState() {
         
         // Set the font properties
@@ -88,11 +136,12 @@ class MemeEditorViewController: UIViewController {
         style.alignment = .center
         
         let fontAttributes: [String: Any] = [
-            NSAttributedStringKey.strokeColor.rawValue: UIColor.white,
-            NSAttributedStringKey.foregroundColor.rawValue: UIColor.black,
+            NSAttributedStringKey.strokeColor.rawValue: UIColor.black,
+            NSAttributedStringKey.foregroundColor.rawValue: UIColor.white,
             NSAttributedStringKey.strokeWidth.rawValue: -4,
+            NSAttributedStringKey.font.rawValue: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
             NSAttributedStringKey.paragraphStyle.rawValue: style,
-        ]
+            ]
         textfieldTop.defaultTextAttributes = fontAttributes
         textfieldBottom.defaultTextAttributes = fontAttributes
         
@@ -127,57 +176,6 @@ class MemeEditorViewController: UIViewController {
         }
     }
     
-    private func shareMeme() {
-        
-        // Takes a screenshot of the screen
-        let memeImage = generateMemedImage()
-        
-        // Creates the screen to share the meme
-        let screen = UIActivityViewController(activityItems: [memeImage], applicationActivities: nil)
-        
-        // Function called when sharing is done or cancel
-        screen.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
-            
-            // Create the meme model
-            self.save(memeImage)
-            
-            // Shows a success alert
-            let actionOk = UIAlertAction(title: "OK", style: .default)
-            let alert = UIAlertController(title: "Meme Sharing", message: "Your meme was shared successfully!", preferredStyle: .alert)
-            alert.addAction(actionOk)
-            self.present(alert, animated: true)
-        }
-        
-        present(screen, animated: true)
-    }
-    
-    private func save(_ memeImage: UIImage) {
-        
-        let meme = Meme(
-            textTop: self.textfieldTop.text!,
-            textBottom: self.textfieldBottom.text!,
-            imageOriginal: self.imageViewMeme.image!,
-            imageMeme: memeImage)
-    }
-    
-    private func generateMemedImage() -> UIImage {
-        
-        // Hide toolbar and navbar
-        configureBars(hidden: true)
-        
-        // Render view to an image
-        UIGraphicsBeginImageContext(self.view.frame.size)
-        view.drawHierarchy(in: self.view.frame, afterScreenUpdates: true)
-
-        let memedImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-
-        // Show toolbar and navbar
-        configureBars(hidden: false)
-        
-        return memedImage
-    }
-    
     private func configureBars(hidden: Bool) {
         
         // Set toolbar and navbar visibility
@@ -186,6 +184,7 @@ class MemeEditorViewController: UIViewController {
         systemBar.isHidden = hidden
     }
 
+    // MARK: Keyboard handling
     private func subscribeToKeyboardEvents() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -198,12 +197,12 @@ class MemeEditorViewController: UIViewController {
     
     @objc func keyboardWillShow(notification: NSNotification) {
         if textfieldBottom.isFirstResponder {
-            self.view.frame.origin.y -= getKeyboardHeight(notification)
+            view.frame.origin.y -= getKeyboardHeight(notification)
         }
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        self.view.frame.origin.y = 0
+        view.frame.origin.y = 0
     }
     
     private func getKeyboardHeight(_ notification: NSNotification) -> CGFloat {
