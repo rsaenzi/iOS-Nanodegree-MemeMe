@@ -61,17 +61,17 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Vdw-LF-drw">
                                 <rect key="frame" x="0.0" y="64" width="320" height="460"/>
                             </imageView>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qYu-Yd-Tj3">
-                                <rect key="frame" x="16" y="444" width="288" height="30"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Text" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qYu-Yd-Tj3">
+                                <rect key="frame" x="16" y="426" width="288" height="48"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WN7-Z3-k8L">
-                                <rect key="frame" x="16" y="114" width="288" height="30"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Text" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WN7-Z3-k8L">
+                                <rect key="frame" x="16" y="114" width="288" height="48"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -105,8 +105,11 @@
                         <outlet property="buttonCancel" destination="oTo-bN-vR6" id="GgH-0Q-U1h"/>
                         <outlet property="buttonShare" destination="ugY-3H-oJi" id="1JN-zD-cMc"/>
                         <outlet property="imageViewMeme" destination="Vdw-LF-drw" id="z2E-Xn-Te0"/>
+                        <outlet property="navBar" destination="Q5r-pU-qrN" id="Ffc-K8-NRd"/>
+                        <outlet property="systemBar" destination="Ibt-AL-7lH" id="lHt-mU-7mf"/>
                         <outlet property="textfieldBottom" destination="qYu-Yd-Tj3" id="1hO-eI-RVR"/>
                         <outlet property="textfieldTop" destination="WN7-Z3-k8L" id="iVz-Wg-P5P"/>
+                        <outlet property="toolBar" destination="ysU-eg-blE" id="E5P-Oy-JKA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
